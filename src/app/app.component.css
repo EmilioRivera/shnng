@@ -1,0 +1,9 @@
+mat-sidenav-container{
+    /* Force an all page render */
+    height: 100vh;
+}
+
+main{
+    margin: 8px;
+    display: block;
+}
