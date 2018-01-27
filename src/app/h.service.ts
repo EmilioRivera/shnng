@@ -21,7 +21,7 @@ export class HService {
     public somewhatOkGetIp(): Promise<string> {
         return this.http.get(this.API_URL_IP).pipe(
                 map( (objectAsJson) => {
-                    return objectAsJson.origin;
+                    return objectAsJson['origin'];
                 }))
             .toPromise();
     }
