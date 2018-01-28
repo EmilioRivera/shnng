@@ -39,7 +39,9 @@ import * as _ from 'lodash';
 
             <mat-card>
                 <button mat-button color="primary"
-                        matTooltip="I dare you to click me">
+                        matTooltip="I dare you to click me"
+                        (click)="showNotImplemented()"
+                        >
                 Teapot Madness
                 </button>
             </mat-card>
@@ -103,18 +105,18 @@ import * as _ from 'lodash';
 })
 export class MaterialComponent implements OnInit {
 
-    spinnerActive: boolean;
-    issues: ISelect[] = [
+    public spinnerActive: boolean;
+    public issues: ISelect[] = [
         {Value: 'FirstVal', ViewValue: 'Need Help'},
         {Value: 'SecondVal', ViewValue: 'Contact Someone'},
         {Value: 'ThirdVal', ViewValue: 'Remind me in a bit'}
     ];
-    sel: ISelect;
-    readonly showSelect = true;
-    myForm: FormGroup;
-    myControl = new FormControl();
-    autoCompleteOptions = CHARGE_DE_LAB;
-    filteredOptions:  Observable<string[]>;
+    public sel: ISelect;
+    public readonly showSelect = true;
+    private myForm: FormGroup;
+    private myControl = new FormControl();
+    private autoCompleteOptions = CHARGE_DE_LAB;
+    private filteredOptions:  Observable<string[]>;
 
     ngOnInit(): void {
         this.spinnerActive = true;
@@ -144,7 +146,6 @@ export class MaterialComponent implements OnInit {
            name: ['', Validators.required],
            chargeDeLab: ['', Validators.required]
        });
-       console.log(this.myForm);
        this.filteredOptions = this.myForm.get('chargeDeLab').valueChanges.pipe(
            startWith(null),
            debounceTime(500),

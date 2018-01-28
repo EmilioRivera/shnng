@@ -9,7 +9,7 @@ import * as _ from 'lodash';
     template: `
         <mat-card>
             <mat-card-title>
-                Ways to get values from services (instance <span *ngIf="id">{{id}}</span>)
+                Ways to get values from services (instance <span *ngIf="hService.instanceNumber">{{hService.instanceNumber}}</span>)
             </mat-card-title>
             <mat-card-content>
                 <div> naiveGetIp: <span *ngIf="naiveGetIp">{{naiveGetIp}}</span></div>
@@ -77,7 +77,13 @@ import * as _ from 'lodash';
             display: inline-block;
         }
     `],
-    animations: [slideInDownAnimation]
+    animations: [slideInDownAnimation],
+    // If HService is set to be provided in this issueComponent, we will get 
+    // a new instance of HService each time this component is created. 
+    // Consequently, if you comment this next line, Angular will look at the clostest top-
+    // provided HService which is in the AppModule. This makes the HService behave as a 
+    // singleton class (kind of) within the module.
+    providers: [HService]
 })
 export class IssueComponent implements OnInit {
     @HostBinding('@routeAnimation') routeAnimation = true;
@@ -108,7 +114,7 @@ export class IssueComponent implements OnInit {
 
     private async startVariousCalls() {
         await Promise.all([
-            this.hService.naiveGetIp().then((v) => { this.naiveGetIp = v; }),
+            this.hService.naiveGetIp().then((v) => { this.naiveGetIp = <string> v; }),
             this.hService.lessNaiveGetIp().then((v) => { this.lessNaiveGetIp = v as string; }),
             this.hService.somewhatOkGetIp().then((v) => { this.somewhatOkGetIp = v as string; }),
             this.hService.betterGetIp().then((v) => { this.betterGetIp = v; }),
