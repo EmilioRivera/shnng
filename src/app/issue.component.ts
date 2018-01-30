@@ -1,7 +1,7 @@
 import { Component, OnInit, HostBinding, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { slideInDownAnimation } from './animations';
-import { HService } from './h.service';
+import { HService, ipMethods, ipDescriptors } from './h.service';
 import * as _ from 'lodash';
 
 @Component({
@@ -12,14 +12,19 @@ import * as _ from 'lodash';
                 Ways to get values from services (instance <span *ngIf="hService.instanceNumber">{{hService.instanceNumber}}</span>)
             </mat-card-title>
             <mat-card-content>
-                <div> naiveGetIp: <span *ngIf="naiveGetIp">{{naiveGetIp}}</span></div>
-                <div> lessNaiveGetIp: <span *ngIf="lessNaiveGetIp">{{lessNaiveGetIp}}</span></div>
-                <div> somewhatOkGetIp: <span *ngIf="somewhatOkGetIp">{{somewhatOkGetIp}}</span></div>
-                <div> betterGetIp: <span *ngIf="betterGetIp">{{betterGetIp}}</span></div>
-                <div> verboseGetIp: <span *ngIf="verboseGetIp">{{verboseGetIp}}</span></div>
+                <span mat-subheader>Ways of using http calls</span>
+                <mat-list id="httplist">
+                    <mat-list-item *ngFor="let v of ipMethods; last as last">
+                        <span class="name">{{v}}:</span>
+                        <span class="value" *ngIf="methodsOfCalling[v]">{{methodsOfCalling[v]}}</span>
+                        <mat-divider [inset]="false" *ngIf="!last"></mat-divider>
+                    </mat-list-item>
+                </mat-list>
+                <label for="file">Chooze deh file</label>
+                <input type="file" name="file" id="file" class="inputfile" />
             </mat-card-content>
         </mat-card>
-        <mat-card>
+        <mat-card >
             <h3>Upload Queue</h3>
             <table>
                 <thead>
@@ -76,6 +81,20 @@ import * as _ from 'lodash';
             border-radius: 3em;
             display: inline-block;
         }
+
+        .inputfile {
+            width: 0.1px;
+            height: 0.1px;
+            opacity: 0;
+            overflow: hidden;
+            position: absolute;
+            z-index: -1;
+        }
+
+        #httplist mat-list-item span.name{
+            flex-grow: 1;
+        }
+
     `],
     animations: [slideInDownAnimation],
     // If HService is set to be provided in this issueComponent, we will get 
@@ -88,11 +107,20 @@ import * as _ from 'lodash';
 export class IssueComponent implements OnInit {
     @HostBinding('@routeAnimation') routeAnimation = true;
     id: string;
-    naiveGetIp: string;
-    lessNaiveGetIp: string;
-    somewhatOkGetIp: string;
-    betterGetIp: string;
-    verboseGetIp: string;
+
+    // Create a map (ipMethod) => result
+    methodsOfCalling = _.reduce(ipMethods, (obj, key: string) => {
+        obj[key] = 'Working on it...';
+        return obj;
+    }, {});
+
+    // First descriptor containing the method of ips
+    // Which is an alternative way of using metadata
+    reflectionMethodOfCalling = ipDescriptors[0];
+
+    // Copy of imported that get our ip
+    public readonly ipMethods = ipMethods;
+
     constructor(
         private route: ActivatedRoute,
         private router: Router,
@@ -113,13 +141,21 @@ export class IssueComponent implements OnInit {
     }
 
     private async startVariousCalls() {
-        await Promise.all([
-            this.hService.naiveGetIp().then((v) => { this.naiveGetIp = <string> v; }),
-            this.hService.lessNaiveGetIp().then((v) => { this.lessNaiveGetIp = v as string; }),
-            this.hService.somewhatOkGetIp().then((v) => { this.somewhatOkGetIp = v as string; }),
-            this.hService.betterGetIp().then((v) => { this.betterGetIp = v; }),
-            this.hService.verboseGetIp().then((v) => { this.verboseGetIp = v; }),
-        ]);
+        console.log(ipMethods);
+        await Promise.all(
+            ipMethods.map(async (key: string) => {
+                const retVal = await this.hService[key]();
+                await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000));
+                this.methodsOfCalling[key] = retVal;
+                return retVal;
+        }));
+    }
+
+    private async getValueViaDescriptor(): Promise<any> {
+        console.log('Invoking via descriptor: ');
+        const valueViaDescriptor = await (<Function>this.reflectionMethodOfCalling.value).call(this.hService, null);
+        console.log(valueViaDescriptor);
+        return valueViaDescriptor;
     }
 }
 
