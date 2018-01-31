@@ -13,6 +13,7 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 import { HService } from './h.service';
 import { HttpClientModule } from '@angular/common/http';
+import { SimpleHttpServiceService } from './simple-http-service.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     AppRoutingModule
   ],
-  providers: [HService],
+  providers: [HService, SimpleHttpServiceService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
