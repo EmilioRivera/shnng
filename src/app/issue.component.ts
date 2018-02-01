@@ -129,30 +129,30 @@ export class IssueComponent implements OnInit {
 
     ngOnInit() {
         console.log(this.route.params);
-        this.route.params.subscribe((obs: Params) => {
-            const x = obs['id'] as string;
-            if (x) {
-                this.id = x;
-            } else {
-                this.id = _.uniqueId();
-            }
-        });
+        this.id = this.hService.instanceNumber.toString();
         this.startVariousCalls();
     }
 
     private async startVariousCalls() {
-        console.log(ipMethods);
         await Promise.all(
+            // Create an array of Promises from the function names
             ipMethods.map(async (key: string) => {
+                // Call the function of hService. We know they all
+                // are Promise-returning function so we can use await
                 const retVal = await this.hService[key]();
+                // Add an intentional random delay to simulate real http requests
                 await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000));
+                // Store the values in our array that is templated in HTML
                 this.methodsOfCalling[key] = retVal;
+                // Don't forget to return the Promise so the top-level await works
                 return retVal;
         }));
     }
 
     private async getValueViaDescriptor(): Promise<any> {
         console.log('Invoking via descriptor: ');
+        // We can use a descriptor to invoke the method said descriptor holds (in its 'value')
+        // With this descriptor, we could use any HService, but we use our own copy.
         const valueViaDescriptor = await (<Function>this.reflectionMethodOfCalling.value).call(this.hService, null);
         console.log(valueViaDescriptor);
         return valueViaDescriptor;
