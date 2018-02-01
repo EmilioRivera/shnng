@@ -102,7 +102,7 @@ import * as _ from 'lodash';
     // Consequently, if you comment this next line, Angular will look at the clostest top-
     // provided HService which is in the AppModule. This makes the HService behave as a 
     // singleton class (kind of) within the module.
-    providers: [HService]
+    // providers: [HService]
 })
 export class IssueComponent implements OnInit {
     @HostBinding('@routeAnimation') routeAnimation = true;

@@ -80,4 +80,8 @@ export class HService {
             return Promise.resolve('UNABLE TO GET VALUE');
         });
     }
+
+    public unrelatedMethod(): number {
+        return 42;
+    }
 }
