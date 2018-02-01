@@ -3,6 +3,10 @@ import { AppComponent } from './app.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('AppComponent', () => {
+  // We configure a testing module with the
+  // async function which is different froms
+  // the typical es5 'async'. The one used here
+  // is actually defined in the Angular Framework
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
@@ -10,6 +14,8 @@ describe('AppComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
+    // Notice that we compiled components, because of the external template,
+    // but this isn't necessary if we use the Angular 'async' function.
   }));
 
   it('should create the app', async(() => {
@@ -30,6 +36,7 @@ describe('AppComponent', () => {
     const compiled = fixture.debugElement.nativeElement;
     const elements = compiled.querySelector('main');
     console.log(elements);
+    // Being null and undefined are two different things in JS and in TS
     expect(elements).not.toBeNull();
   }));
 });
