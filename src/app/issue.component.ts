@@ -1,3 +1,4 @@
+import { animate, group, state, style, transition, trigger, query } from '@angular/animations';
 import { Component, OnInit, HostBinding, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { slideInDownAnimation } from './animations';
@@ -96,11 +97,40 @@ import * as _ from 'lodash';
         }
 
     `],
-    animations: [slideInDownAnimation],
-    // If HService is set to be provided in this issueComponent, we will get 
-    // a new instance of HService each time this component is created. 
+    animations: [
+        trigger('routeAnimation', [
+          transition(':increment', group([
+            query(':enter', [
+              style({
+                left: '100%'
+              }),
+              animate('0.5s ease-out', style('*'))
+            ]),
+            query(':leave', [
+              animate('0.5s ease-out', style({
+                left: '-100%'
+              }))
+            ])
+          ])),
+          transition(':decrement', group([
+            query(':enter', [
+              style({
+                left: '-100%'
+              }),
+              animate('0.5s ease-out', style('*'))
+            ]),
+            query(':leave', [
+              animate('0.5s ease-out', style({
+                left: '100%'
+              }))
+            ])
+          ]))
+        ])
+      ],
+    // If HService is set to be provided in this issueComponent, we will get
+    // a new instance of HService each time this component is created.
     // Consequently, if you comment this next line, Angular will look at the clostest top-
-    // provided HService which is in the AppModule. This makes the HService behave as a 
+    // provided HService which is in the AppModule. This makes the HService behave as a
     // singleton class (kind of) within the module.
     // providers: [HService]
 })
