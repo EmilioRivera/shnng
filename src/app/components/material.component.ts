@@ -3,7 +3,7 @@ import { MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, NgModel, Validators, FormControl } from '@angular/forms';
 import {Operator, Observable} from 'rxjs/Rx';
 import { startWith, map, debounceTime } from 'rxjs/operators';
-import { CHARGE_DE_LAB } from './definitions';
+import { CHARGE_DE_LAB } from '../definitions/invariants';
 import * as _ from 'lodash';
 
 @Component({

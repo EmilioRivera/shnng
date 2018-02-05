@@ -1,8 +1,8 @@
 import { animate, group, state, style, transition, trigger, query } from '@angular/animations';
 import { Component, OnInit, HostBinding, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { slideInDownAnimation } from './animations';
-import { HService, ipMethods, ipDescriptors } from './h.service';
+import { slideInDownAnimation } from '../definitions/animations';
+import { HService, ipMethods, ipDescriptors } from '../services/h.service';
 import * as _ from 'lodash';
 
 @Component({

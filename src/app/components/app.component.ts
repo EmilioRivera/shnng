@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { DEFAULT_LINKS } from './links';
+import { DEFAULT_LINKS } from '../definitions/invariants';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IssueComponent } from './issue.component';
-import { DashboardComponent } from './dashboard.component';
+import { IssueComponent } from './components/issue.component';
+import { DashboardComponent } from './components/dashboard.component';
 
-import { MaterialComponent } from './material.component';
+import { MaterialComponent } from './components/material.component';
 // TODO : Put the right paths
 const routes: Routes = [
   { path: 'material', component: MaterialComponent },
