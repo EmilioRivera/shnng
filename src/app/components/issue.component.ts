@@ -6,7 +6,7 @@ import { HService, ipMethods, ipDescriptors } from '../services/h.service';
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'issue-comp',
+    selector: 'app-issue',
     templateUrl: './issue.component.html',
     styleUrls: [ './issue.component.css' ],
     animations: [

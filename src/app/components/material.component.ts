@@ -1,13 +1,13 @@
 import {Component, OnInit, HostBinding} from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { FormBuilder, FormGroup, NgModel, Validators, FormControl } from '@angular/forms';
-import {Operator, Observable} from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
 import { startWith, map, debounceTime } from 'rxjs/operators';
 import { CHARGE_DE_LAB } from '../definitions/invariants';
 import * as _ from 'lodash';
 
 @Component({
-    selector: 'my-mat',
+    selector: 'app-material',
     templateUrl: './material.component.html'
 })
 export class MaterialComponent implements OnInit {
