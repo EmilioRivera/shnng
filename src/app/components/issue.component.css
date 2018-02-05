@@ -1,0 +1,29 @@
+mat-card-title{
+    font-family: Khula;
+    font-size: 5em;
+    text-align: center;
+}
+
+mat-card{
+    margin-bottom: 4px;
+}
+
+.my-drop-zone{
+    outline: solid 1px aliceblue;
+    padding: 2em;
+    border-radius: 3em;
+    display: inline-block;
+}
+
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+
+#httplist mat-list-item span.name{
+    flex-grow: 1;
+}

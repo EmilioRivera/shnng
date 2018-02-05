@@ -1,0 +1,54 @@
+<mat-card>
+    <mat-card-title>
+        Ways to get values from services (instance <span *ngIf="hService.instanceNumber">{{hService.instanceNumber}}</span>)
+    </mat-card-title>
+    <mat-card-content>
+        <span mat-subheader>Ways of using http calls</span>
+        <mat-list id="httplist">
+            <mat-list-item *ngFor="let v of ipMethods; last as last">
+                <span class="name">{{v}}:</span>
+                <span class="value" *ngIf="methodsOfCalling[v]">{{methodsOfCalling[v]}}</span>
+                <mat-divider [inset]="false" *ngIf="!last"></mat-divider>
+            </mat-list-item>
+        </mat-list>
+        <label for="file">Chooze deh file</label>
+        <input type="file" name="file" id="file" class="inputfile" />
+    </mat-card-content>
+</mat-card>
+<mat-card >
+    <h3>Upload Queue</h3>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Progress</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</mat-card>
+
+<mat-card>
+    <mat-card-subtitle>Queue progress</mat-card-subtitle>
+    <mat-progress-bar
+        color="accent"
+        mode="determinate"
+    ></mat-progress-bar>
+
+    <button mat-button color="primary"
+            mat-tooltip="Upload all items">
+            Upload All
+    </button>
+
+    <button mat-button color="accent"
+            mat-tooltip="Cancel all items">
+            Cancel All
+    </button>
+
+    <button mat-button color="warn"
+            mat-tooltip="Remove All items">
+            Remove all
+    </button>
+</mat-card>
