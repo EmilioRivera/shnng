@@ -3,17 +3,17 @@ import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule  } from '@angular/forms';
 import { MyMaterialModule } from './my-material.module';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { AppComponent } from './components/app.component';
 
-import { FormStatusPipe } from './form-status.pipe';
-import { IssueComponent } from './issue.component';
-import { MaterialComponent } from './material.component';
-import { DashboardComponent } from './dashboard.component';
+import { FormStatusPipe } from './pipes/form-status.pipe';
+import { IssueComponent } from './components/issue.component';
+import { MaterialComponent } from './components/material.component';
+import { DashboardComponent } from './components/dashboard.component';
 import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
-import { HService } from './h.service';
+import { HService } from './services/h.service';
 import { HttpClientModule } from '@angular/common/http';
-import { SimpleHttpServiceService } from './simple-http-service.service';
+import { SimpleHttpServiceService } from './services/simple-http-service.service';
 
 @NgModule({
   declarations: [

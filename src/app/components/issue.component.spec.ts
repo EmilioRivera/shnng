@@ -2,11 +2,11 @@ import { TestBed, async as angularAsync, ComponentFixture } from '@angular/core/
 import { IssueComponent } from './issue.component';
 import { DebugElement } from '@angular/core';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HService, ipMethods } from './h.service';
+import { HService, ipMethods } from '../services/h.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ActivatedRouteStub } from './router-stubs';
+import { ActivatedRouteStub } from '../testing/router-stubs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MyMaterialModule } from './my-material.module';
+import { MyMaterialModule } from '../my-material.module';
 import { By } from '@angular/platform-browser';
 
 class RouterStub {
