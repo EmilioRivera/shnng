@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DEFAULT_LINKS } from '../definitions/invariants';
+import { ILink } from '../definitions/ILink';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +8,6 @@ import { DEFAULT_LINKS } from '../definitions/invariants';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Material Demo';
-  public readonly appLinks = DEFAULT_LINKS;
+  public title: string = 'Material Demo';
+  public readonly appLinks: ILink[] = DEFAULT_LINKS;
 }

@@ -15,7 +15,7 @@ export let DEFAULT_LINKS: ILink[] = [
   }
 ];
 
-export let CHARGE_DE_LAB = [
+export let CHARGE_DE_LAB: string[] = [
     'Nikolay',
     'Dylan',
     'Mathieu',

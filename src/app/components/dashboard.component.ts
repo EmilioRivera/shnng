@@ -9,8 +9,8 @@ import { MatDialog } from '@angular/material';
 })
 export class DashboardComponent implements OnInit {
     private canPlay: boolean;
-    constructor(private mdDialog: MatDialog) {}
-    ngOnInit(): void {
+    public constructor(private mdDialog: MatDialog) {}
+    public ngOnInit(): void {
         this.canPlay = true;
     }
     public openDialog(): void {

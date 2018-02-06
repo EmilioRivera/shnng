@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
+import { AbstractControl } from '@angular/forms/src/model';
 
 /*
  * Show a FormControl status (warning: this is an Impure Pipe)
@@ -11,8 +12,9 @@ import { FormGroup, FormControl } from '@angular/forms';
 */
 @Pipe({ name: 'formStatus', pure: false})
 export class FormStatusPipe implements PipeTransform {
-    transform(formGroup: FormGroup, name: string): Object {
-        const re = formGroup.get(name);
+    public transform(formGroup: FormGroup, name: string): Object {
+        const re: AbstractControl = formGroup.get(name);
+
         return re == null ? {} : {
             controlName: name,
             controlValue: re.value,

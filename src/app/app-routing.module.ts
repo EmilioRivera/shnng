@@ -4,7 +4,6 @@ import { IssueComponent } from './components/issue.component';
 import { DashboardComponent } from './components/dashboard.component';
 
 import { MaterialComponent } from './components/material.component';
-// TODO : Put the right paths
 const routes: Routes = [
   { path: 'material', component: MaterialComponent },
   { path: 'dashboard', component: DashboardComponent },

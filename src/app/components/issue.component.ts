@@ -1,7 +1,6 @@
-import { animate, group, state, style, transition, trigger, query } from '@angular/animations';
-import { Component, OnInit, HostBinding, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { slideInDownAnimation } from '../definitions/animations';
+import { animate, group, style, transition, trigger, query } from '@angular/animations';
+import { Component, OnInit, HostBinding } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { HService, ipMethods, ipDescriptors } from '../services/h.service';
 import * as _ from 'lodash';
 
@@ -47,58 +46,62 @@ import * as _ from 'lodash';
     // providers: [HService]
 })
 export class IssueComponent implements OnInit {
-    @HostBinding('@routeAnimation') routeAnimation = true;
-    id: string;
-
+    @HostBinding('@routeAnimation') public routeAnimation: Boolean = true;
+    public id: string;
+    private readonly MAX_WAIT_TIME: number = 3000; // ms
     // Create a map (ipMethod) => result
-    methodsOfCalling = _.reduce(ipMethods, (obj, key: string) => {
+    public methodsOfCalling: {} = _.reduce(ipMethods, (obj, key: string) => {
         obj[key] = 'Working on it...';
+
         return obj;
-    }, {});
+    },                                     {});
 
     // First descriptor containing the method of ips
     // Which is an alternative way of using metadata
-    reflectionMethodOfCalling = ipDescriptors[0];
+    public reflectionMethodOfCalling: TypedPropertyDescriptor<any> = ipDescriptors[0];
 
     // Copy of imported that get our ip
-    public readonly ipMethods = ipMethods;
+    public readonly ipMethods: (string|symbol)[] = ipMethods;
 
-    constructor(
+    public constructor(
+        // tslint:disable-next-line:no-unused-variable
         private route: ActivatedRoute,
+        // tslint:disable-next-line:no-unused-variable
         private router: Router,
         private hService: HService
     ) {}
 
-    ngOnInit() {
-        console.log(this.route.params);
+    public ngOnInit(): void {
+        // console.log(this.route.params);
         this.id = this.hService.instanceNumber.toString();
-        this.startVariousCalls();
+        void this.startVariousCalls();
+        void this.getValueViaDescriptor();
     }
 
-    private async startVariousCalls() {
+    private async startVariousCalls(): Promise<void> {
         await Promise.all(
             // Create an array of Promises from the function names
             ipMethods.map(async (key: string) => {
                 // Call the function of hService. We know they all
                 // are Promise-returning function so we can use await
-                const retVal = await this.hService[key]();
+                const retVal: string = await this.hService[key]();
                 // Add an intentional random delay to simulate real http requests
-                await new Promise((resolve) => setTimeout(resolve, Math.random() * 3000));
+                await new Promise((resolve) => setTimeout(resolve, Math.random() * this.MAX_WAIT_TIME));
                 // Store the values in our array that is templated in HTML
                 this.methodsOfCalling[key] = retVal;
                 // Don't forget to return the Promise so the top-level await works
+
                 return retVal;
         }));
     }
 
-    private async getValueViaDescriptor(): Promise<any> {
-        console.log('Invoking via descriptor: ');
+    private async getValueViaDescriptor(): Promise<string> {
         // We can use a descriptor to invoke the method said descriptor holds (in its 'value')
         // With this descriptor, we could use any HService, but we use our own copy.
-        const valueViaDescriptor = await (<Function>this.reflectionMethodOfCalling.value).call(this.hService, null);
-        console.log(valueViaDescriptor);
+        // tslint:disable-next-line:no-unnecessary-local-variable
+        const valueViaDescriptor: string = await (this.reflectionMethodOfCalling.value as Function).call(this.hService, null);
+        // console.log(valueViaDescriptor);
+
         return valueViaDescriptor;
     }
 }
-
-//  TODO: Style inputs with https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/

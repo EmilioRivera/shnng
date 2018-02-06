@@ -1,6 +1,7 @@
 import { HService } from './h.service';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed, inject, getTestBed } from '@angular/core/testing';
+import { logPromiseError } from '../testing/log-error';
 
 describe('A basic http service', () => {
 
@@ -11,7 +12,7 @@ describe('A basic http service', () => {
             providers: [HService],
             imports: [HttpClientTestingModule]
         });
-        const injector = getTestBed();
+        const injector: TestBed = getTestBed();
         theService = injector.get(HService);
         httpMock = injector.get(HttpTestingController);
     });
@@ -22,10 +23,11 @@ describe('A basic http service', () => {
 
     it('should get an ip ', () => {
         theService.betterGetIp().then((v) => {
-            console.log(v);
+            // console.log(v);
             expect(v).toBeTruthy();
-        });
-        const req = httpMock.expectOne(`http://httpbin.org/ip`);
+        }).catch(logPromiseError);
+        const req: TestRequest = httpMock.expectOne(`http://httpbin.org/ip`);
+        req.flush('anything');
     });
 
     afterEach(() => {

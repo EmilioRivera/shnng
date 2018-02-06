@@ -1,16 +1,16 @@
 import { TestBed, async as angularAsync, ComponentFixture } from '@angular/core/testing';
 import { IssueComponent } from './issue.component';
 import { DebugElement } from '@angular/core';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { HService, ipMethods } from '../services/h.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActivatedRouteStub } from '../testing/router-stubs';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from '../my-material.module';
 import { By } from '@angular/platform-browser';
+import { logPromiseError } from '../testing/log-error';
 
 class RouterStub {
-    navigateByUrl(url: string) { return url; }
+    public navigateByUrl(url: string): string { return url; }
 }
 
 // A class that replaces the traditionnal HService
@@ -18,18 +18,18 @@ class RouterStub {
 // that will be called in the Component under test. (see how the 'unrelated method' in
 // the original service is not declared here, nor dynamically created).
 class HServiceSpy {
-    instanceNumber: number;
+    public instanceNumber: number;
     // Create a value that was non existant in the original HService.
     public readonly otherValue: string = 'I am a stub';
     // We dynamically attach the methods by getting the name of the functions in the
     // first parameter
-    constructor(ipMethodsName: string[], valueToResolve: any, instanceNumber: number = 0) {
+    public constructor(ipMethodsName: (string|symbol)[], valueToResolve: any, instanceNumber: number = 0) {
         this.instanceNumber = instanceNumber;
         for (const method of ipMethodsName) {
             // Note that this method will not be executed if we spy on the service
             // as we do later.
-            this[method] = (): Promise<any> => {
-                console.log('Response from spy service');
+            this[method] = async (): Promise<any> => {
+
                 return Promise.resolve(valueToResolve);
             };
         }
@@ -46,9 +46,9 @@ describe('IssueComponent', () => {
     let hsSpy: HServiceSpy;
 
     // IP that the HServiceSpy will answer
-    const serviceAnswerIp = ':::1';
+    const serviceAnswerIp: string = ':::1';
     // IP that the spy on the injected service will use.
-    const spyValueIp = ':::2';
+    const spyValueIp: string = ':::2';
 
     // This will only be ran once
     beforeAll(() => {
@@ -80,7 +80,7 @@ describe('IssueComponent', () => {
                 // by the testing module, this line is not necessary
                 //    CUSTOM_ELEMENTS_SCHEMA
             ]
-        }).compileComponents();
+        }).compileComponents().catch(logPromiseError);
     }));
 
     beforeEach(angularAsync(() => {
@@ -96,7 +96,7 @@ describe('IssueComponent', () => {
     beforeEach(() => {
         // We can further customize the value which will NOT call the service
         for (const iterator of ipMethods) {
-            const spy = spyOn(hService, iterator).and.returnValue(Promise.resolve(spyValueIp));
+            const spy: jasmine.Spy = spyOn(hService, iterator as any).and.returnValue(Promise.resolve(spyValueIp));
             hServiceIpSpies[iterator] = spy;
         }
         // If you want to see which service is used, you can uncomment these:
@@ -112,16 +112,16 @@ describe('IssueComponent', () => {
         expect(issueInstance).toBeTruthy();
     });
 
-    it('should get the ip from either spy', angularAsync(() => {
+    it('should get the ip from either spy', () => {
         fixture.detectChanges();
 
         fixture.whenStable().then(() => {
             fixture.detectChanges();
-            const firstVal = debugElement.query(By.css('#httplist span.value'));
-            const nativeSpan = firstVal.nativeElement as HTMLSpanElement;
+            const firstVal: DebugElement = debugElement.query(By.css('#httplist span.value'));
+            const nativeSpan: HTMLSpanElement = firstVal.nativeElement as HTMLSpanElement;
             // Check if the value is either serviceAnswerIp or spyValueIp
             expect([serviceAnswerIp, spyValueIp]).toContain(nativeSpan.textContent);
-        });
-    }));
+        }).catch(logPromiseError);
+    });
 
 });

@@ -1,4 +1,5 @@
 import { AppPage } from './app.po';
+import { logPromiseError } from '../src/app/testing/log-error';
 
 describe('testing App', () => {
   let page: AppPage;
@@ -7,8 +8,10 @@ describe('testing App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
-    page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to app!');
+  it('should display welcome message', async () => {
+    void await page.navigateTo();
+    page.getParagraphText().then((val) => {
+      expect(val).toEqual('Welcome to app!').catch(logPromiseError);
+    }).catch(logPromiseError);
   });
 });
