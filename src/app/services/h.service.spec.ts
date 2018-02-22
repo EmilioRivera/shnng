@@ -27,7 +27,7 @@ describe('A basic http service', () => {
         }).catch(logPromiseError);
 
         const req: TestRequest = httpMock.expectOne(theService.API_URL_IP);
-        req.flush('anything');
+        req.flush({'origin': 'anything'});
     });
 
 });
