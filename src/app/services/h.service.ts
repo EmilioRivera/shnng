@@ -50,7 +50,7 @@ export class HService {
 
     @ip
     public async lessNaiveGetIp(): Promise<string> {
-        return this.http.get(this.API_URL_IP).toPromise().then((value) => value['origin'] as string);
+        return this.http.get(this.API_URL_IP).toPromise().then((value) => value as string);
     }
 
     @ip
