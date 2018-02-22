@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 
 @Injectable()
-export class SimpleHttpServiceService {
+export class SimpleHttpService {
   public readonly API_URL: string = 'http://httpbin.org';
   public constructor(private httpc: HttpClient) { }
 

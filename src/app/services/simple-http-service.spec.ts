@@ -1,20 +1,20 @@
 import { TestBed, inject, getTestBed, async as angularAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { SimpleHttpServiceService } from './simple-http-service.service';
+import { SimpleHttpService } from './simple-http.service';
 import { TestRequest } from '@angular/common/http/testing/src/request';
 import { logPromiseError } from '../testing/log-error';
 
-describe('SimpleHttpServiceService', () => {
+describe('SimpleHttpService', () => {
   let backend: HttpTestingController;
-  let service: SimpleHttpServiceService;
+  let service: SimpleHttpService;
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [SimpleHttpServiceService]
+      providers: [SimpleHttpService]
     });
     backend = getTestBed().get(HttpTestingController);
-    service = getTestBed().get(SimpleHttpServiceService);
+    service = getTestBed().get(SimpleHttpService);
   });
 
   afterEach(() => {
@@ -52,12 +52,12 @@ describe('A related test suite', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, HttpClientModule],
-      providers: [SimpleHttpServiceService]
+      providers: [SimpleHttpService]
     });
   });
 
   // tslint:disable-next-line:max-line-length
-  it('should always pass on non http promises', angularAsync(inject([SimpleHttpServiceService], (object: SimpleHttpServiceService) => {
+  it('should always pass on non http promises', angularAsync(inject([SimpleHttpService], (object: SimpleHttpService) => {
     object.GetSureIp().then((val) => {
       expect(val).toBeTruthy();
     }).catch((reason) => {
@@ -66,7 +66,7 @@ describe('A related test suite', () => {
   })));
 
   // tslint:disable-next-line:max-line-length
-  it('should be able to answer if backend is injected directly', angularAsync(inject([SimpleHttpServiceService, HttpTestingController], (object: SimpleHttpServiceService, backend: HttpTestingController) => {
+  it('should be able to answer if backend is injected directly', angularAsync(inject([SimpleHttpService, HttpTestingController], (object: SimpleHttpService, backend: HttpTestingController) => {
     const expectedIp: string = ':::1';
     object.GetSimpleIp().then((v) => {
       expect(v).toBe(expectedIp);
