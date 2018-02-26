@@ -14,10 +14,11 @@ import { BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HService } from './services/h.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SimpleHttpService } from './services/simple-http.service';
+import { PositionExtractorDirective } from './position-extractor.directive';
 
 @NgModule({
   declarations: [
-    AppComponent, MaterialComponent, DashboardComponent, IssueComponent, FormStatusPipe
+    AppComponent, MaterialComponent, DashboardComponent, IssueComponent, FormStatusPipe, PositionExtractorDirective
   ],
   imports: [
     HttpClientModule,

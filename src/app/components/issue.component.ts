@@ -78,6 +78,15 @@ export class IssueComponent implements OnInit {
         void this.getValueViaDescriptor();
     }
 
+    public fileSelection(): void {
+      // tslint:disable-next-line:no-trailing-whitespace
+      
+    }
+
+    public obtainValues(p: any): void {
+      console.log(p);
+    }
+
     private async startVariousCalls(): Promise<void> {
         await Promise.all(
             // Create an array of Promises from the function names

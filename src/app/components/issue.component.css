@@ -27,3 +27,9 @@ mat-card{
 #httplist mat-list-item span.name{
     flex-grow: 1;
 }
+
+.rendercanvas{
+    height: 400px;
+    border: 2px dashed blue;
+    box-sizing: content-box;
+}

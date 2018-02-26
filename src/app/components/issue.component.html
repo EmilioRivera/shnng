@@ -12,7 +12,7 @@
             </mat-list-item>
         </mat-list>
         <label for="file">Chooze deh file</label>
-        <input type="file" name="file" id="file" class="inputfile" />
+        <input type="file" name="file" id="file" class="inputfile" (change)="fileSelection()"/>
     </mat-card-content>
 </mat-card>
 <mat-card >
@@ -51,4 +51,12 @@
             mat-tooltip="Remove All items">
             Remove all
     </button>
+</mat-card>
+<mat-card>
+    <mat-card-title>Mouse events help</mat-card-title>
+    <mat-card-content>
+        <div class="rendercanvas" appPositionExtractor (appPosition)="obtainValues($event)">
+            Here should be the canvas...
+        </div>
+    </mat-card-content>
 </mat-card>
