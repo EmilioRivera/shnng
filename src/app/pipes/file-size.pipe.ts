@@ -28,6 +28,7 @@ export class FileSizePipe implements PipeTransform {
     // tslint:disable:no-magic-numbers
     let finalVal: string;
     if (strategy === 'h') {
+      // tslint:disable-next-line:prefer-conditional-expression
       if (value / 1024 ** 0 < 1024) {
         strategy = 'B';
       } else if (value / 1024 ** 1 < 1024) {
@@ -41,6 +42,7 @@ export class FileSizePipe implements PipeTransform {
       }
     }
 
+    // tslint:disable-next-line:prefer-conditional-expression
     if (strategy === 'B') {
       finalVal = value.toString() + 'B';
     } else if (strategy === 'K') {
