@@ -23,7 +23,7 @@ describe('A basic http service', () => {
 
     it('should get a value from ip', () => {
         theService.lessNaiveGetIp().then((v) => {
-            expect(v).toEqual('anything');
+            expect(v['origin']).toEqual('anything');
         }).catch(logPromiseError);
 
         const req: TestRequest = httpMock.expectOne(theService.API_URL_IP);

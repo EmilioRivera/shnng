@@ -8,6 +8,10 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MyMaterialModule } from '../my-material.module';
 import { By } from '@angular/platform-browser';
 import { logPromiseError } from '../testing/log-error';
+import { Observable } from 'rxjs/Observable';
+import { of as oof } from 'rxjs/observable/of';
+import { FileUploaderService } from '../services/file-uploader.service';
+import { FileSizePipe } from '../pipes/file-size.pipe';
 
 class RouterStub {
     public navigateByUrl(url: string): string { return url; }
@@ -36,6 +40,15 @@ class HServiceSpy {
     }
 }
 
+// tslint:disable-next-line:max-classes-per-file
+class UploadSpyService {
+    public upload(files: File[]): Observable<any> {
+        return oof([{
+            'exampleData': 'hi'
+        }]);
+    }
+}
+
 describe('IssueComponent', () => {
     let fixture: ComponentFixture<IssueComponent>;
     let debugElement: DebugElement;
@@ -44,6 +57,7 @@ describe('IssueComponent', () => {
     let hServiceIpSpies: Map<string, jasmine.Spy>;
     let activatedRoute: ActivatedRouteStub;
     let hsSpy: HServiceSpy;
+    let upSpy: UploadSpyService;
 
     // IP that the HServiceSpy will answer
     const serviceAnswerIp: string = ':::1';
@@ -56,6 +70,7 @@ describe('IssueComponent', () => {
         hsSpy = new HServiceSpy(ipMethods, serviceAnswerIp);
         activatedRoute = new ActivatedRouteStub();
         activatedRoute.testParamMap = { id: 'pas important' };
+        upSpy = new UploadSpyService();
     });
 
     beforeEach(angularAsync(() => {
@@ -69,11 +84,12 @@ describe('IssueComponent', () => {
                 // and will render the component somewhat correctly.
                 MyMaterialModule
             ],
-            declarations: [IssueComponent],
+            declarations: [IssueComponent, FileSizePipe],
             providers: [
                 { provide: HService, useValue: hsSpy },
                 { provide: Router, useClass: RouterStub },
                 { provide: ActivatedRoute, useValue: activatedRoute },
+                { provide: FileUploaderService, useValue: upSpy },
             ],
             schemas: [
                 // If the current component only uses elements (aka <> in HTML) that ARE IMPORTED
