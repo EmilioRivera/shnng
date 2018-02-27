@@ -66,7 +66,6 @@ export class IssueComponent implements OnInit {
 
     // Copy of imported that get our ip
     public readonly ipMethods: (string|symbol)[] = ipMethods;
-    public filesToUpload: File[] = [];
     public fileProgress: BehaviorSubject<IFileUpload[]>;
     public displayedColumns: string[] = ['name', 'size', 'progress'];
 
@@ -99,9 +98,21 @@ export class IssueComponent implements OnInit {
     }
 
     public uploadAllFiles(): void {
-      this.fileUploader.upload(this.filesToUpload).subscribe((obs) => {
+      const activatedFiles: IFileUpload[] = this.fileProgress.value.map((file: IFileUpload) => {
+        file.active = true;
+
+        return file;
+      });
+      this.fileProgress.next(activatedFiles);
+      this.fileUploader.upload(activatedFiles.map((v) => v.file)).subscribe((obs) => {
         console.log(`Component got ${obs}`);
       });
+    }
+    public anyActive = (): boolean => this.fileProgress.getValue().filter((v) => v.active).length === 0;
+    public removeAllFiles(): void {
+      // We should check if we're currently uploading stuff so we can
+      // cancel it... but that's for later
+      this.fileProgress.next([]);
     }
 
     // Implement a strategy to merge files
@@ -115,11 +126,11 @@ export class IssueComponent implements OnInit {
       for (let i: number = 0; i < files.length; i++) {
         filesToUp.push({
           'file': files[i],
-          'progress': 0
+          'progress': 0,
+          active: false
         });
       }
       const finalSelection: IFileUpload[] = this.removeDuplicates(currentSel, filesToUp);
-      this.filesToUpload = finalSelection.map((v) => v.file);
       this.fileProgress.next(finalSelection);
     }
 
@@ -160,4 +171,5 @@ export class IssueComponent implements OnInit {
 interface IFileUpload {
   file: File;
   progress: number;
+  active?: boolean;
 }

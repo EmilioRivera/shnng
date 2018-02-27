@@ -15,15 +15,15 @@
             <mat-icon>file_upload</mat-icon>
             <span>Chooze deh file</span>
         </label>
-        <input type="file" name="file" id="file" class="inputfile" (change)="fileSelection($event)"/>
+        <input type="file" name="file" id="file" class="inputfile" (change)="fileSelection($event)" multiple/>
     </mat-card-content>
 </mat-card>
 <mat-card >
     <h3>Upload Queue</h3>
     <mat-list>
-        <mat-list-item *ngFor="let file of filesToUpload; last as last">
+        <mat-list-item *ngFor="let file of (fileProgress | async); last as last ">
             <mat-icon matListIcon aria.hidden="true">file_upload</mat-icon>
-            <span>{{file.name}}</span>
+            <span>{{file.file.name}}</span>
             <mat-divider *ngIf="!last"></mat-divider>
         </mat-list-item>
     </mat-list>
@@ -53,12 +53,12 @@
             <th>Actions</th>
         </thead>
         <tbody>
-            <tr *ngFor="let f of filesToUpload">
-                <td>{{f.name}}</td>
-                <td>{{f.name}}</td>
-                <td>{{f.name}}</td>
-                <td>{{f.name}}</td>
-                <td>{{f.name}}</td>                
+            <tr *ngFor="let f of fileProgress | async">
+                <td>{{f.file.name}}</td>
+                <td>{{f.file.size | fileSize}}</td>
+                <td>{{f.progress}}</td>
+                <td>Empty</td>
+                <td>Empty</td>                
             </tr>
         </tbody>
     </table>
@@ -74,17 +74,23 @@
     <button mat-button color="primary"
             mat-tooltip="Upload all items"
             (click)="uploadAllFiles()"
+            [disabled]="this.fileProgress.getValue().length == 0"
             >
             Upload All
     </button>
 
     <button mat-button color="accent"
-            mat-tooltip="Cancel all items">
+            mat-tooltip="Cancel all items"
+            [disabled]="anyActive()"
+            >
             Cancel All
     </button>
 
     <button mat-button color="warn"
-            mat-tooltip="Remove All items">
+            mat-tooltip="Remove All items"
+            (click)="removeAllFiles()"
+            [disabled]="this.fileProgress.getValue().length == 0"
+            >
             Remove all
     </button>
 </mat-card>
