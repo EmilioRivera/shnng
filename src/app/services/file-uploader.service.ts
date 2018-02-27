@@ -22,7 +22,6 @@ export class FileUploaderService {
     });
     const formData: FormData = new FormData();
     console.log(files);
-    formData.append('test', 'tesst');
     formData.append('upload', files[0], files[0].name);
     console.log(formData);
 
