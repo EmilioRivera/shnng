@@ -11,12 +11,22 @@
                 <mat-divider [inset]="false" *ngIf="!last"></mat-divider>
             </mat-list-item>
         </mat-list>
-        <label for="file">Chooze deh file</label>
-        <input type="file" name="file" id="file" class="inputfile" (change)="fileSelection()"/>
+        <label for="file" class="fileUpload">
+            <mat-icon>file_upload</mat-icon>
+            <span>Chooze deh file</span>
+        </label>
+        <input type="file" name="file" id="file" class="inputfile" (change)="fileSelection($event)"/>
     </mat-card-content>
 </mat-card>
 <mat-card >
     <h3>Upload Queue</h3>
+    <mat-list>
+        <mat-list-item *ngFor="let file of filesToUpload; last as last">
+            <mat-icon matListIcon aria.hidden="true">file_upload</mat-icon>
+            <span>{{file.name}}</span>
+            <mat-divider *ngIf="!last"></mat-divider>
+        </mat-list-item>
+    </mat-list>
     <table>
         <thead>
             <th>Name</th>
@@ -26,6 +36,13 @@
             <th>Actions</th>
         </thead>
         <tbody>
+            <tr *ngFor="let f of filesToUpload">
+                <td>{{f.name}}</td>
+                <td>{{f.name}}</td>
+                <td>{{f.name}}</td>
+                <td>{{f.name}}</td>
+                <td>{{f.name}}</td>                
+            </tr>
         </tbody>
     </table>
 </mat-card>
@@ -38,7 +55,9 @@
     ></mat-progress-bar>
 
     <button mat-button color="primary"
-            mat-tooltip="Upload all items">
+            mat-tooltip="Upload all items"
+            (click)="uploadAllFiles()"
+            >
             Upload All
     </button>
 

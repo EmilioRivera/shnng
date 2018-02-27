@@ -21,3 +21,5 @@ export let CHARGE_DE_LAB: string[] = [
     'Mathieu',
     'Emilio'
 ];
+
+export let SERVER_URL: string = 'http://localhost:3000';

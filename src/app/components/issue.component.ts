@@ -2,7 +2,10 @@ import { animate, group, style, transition, trigger, query } from '@angular/anim
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HService, ipMethods, ipDescriptors } from '../services/h.service';
+import { MatIconRegistry } from '@angular/material';
 import * as _ from 'lodash';
+import { FileUploaderService } from '../services/file-uploader.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'app-issue',
@@ -55,20 +58,21 @@ export class IssueComponent implements OnInit {
 
         return obj;
     },                                     {});
-
     // First descriptor containing the method of ips
     // Which is an alternative way of using metadata
     public reflectionMethodOfCalling: TypedPropertyDescriptor<any> = ipDescriptors[0];
 
     // Copy of imported that get our ip
     public readonly ipMethods: (string|symbol)[] = ipMethods;
-
+    public filesToUpload: File[] = [];
+    public fileProgress: Observable<number[]>;
     public constructor(
         // tslint:disable-next-line:no-unused-variable
         private route: ActivatedRoute,
         // tslint:disable-next-line:no-unused-variable
         private router: Router,
-        private hService: HService
+        private hService: HService,
+        private fileUploader: FileUploaderService
     ) {}
 
     public ngOnInit(): void {
@@ -78,13 +82,32 @@ export class IssueComponent implements OnInit {
         void this.getValueViaDescriptor();
     }
 
-    public fileSelection(): void {
-      // tslint:disable-next-line:no-trailing-whitespace
-      
+    public fileSelection(e: Event): void {
+      console.log(e);
+      const targetElement: HTMLInputElement =  e.target as HTMLInputElement;
+      const files: FileList = targetElement.files;
+      this.joinFilesToUpload(files);
     }
 
     public obtainValues(p: any): void {
       console.log(p);
+    }
+
+    public uploadAllFiles(): void {
+      this.fileUploader.upload(this.filesToUpload).subscribe((obs) => {
+        console.log(`Component got ${obs}`);
+      });
+    }
+
+    // Implement a strategy to merge files
+    private joinFilesToUpload(files: FileList): void {
+      // For the moment this is as simple as adding eveything
+      // we get, but we have to check for duplicates and/or
+      // supported files with constraints.
+      // tslint:disable-next-line:prefer-for-of
+      for (let i: number = 0; i < files.length; i++) {
+        this.filesToUpload.push(files[i]);
+      }
     }
 
     private async startVariousCalls(): Promise<void> {
@@ -95,7 +118,7 @@ export class IssueComponent implements OnInit {
                 // are Promise-returning function so we can use await
                 const retVal: string = await this.hService[key]();
                 // Add an intentional random delay to simulate real http requests
-                await new Promise((resolve) => setTimeout(resolve, Math.random() * this.MAX_WAIT_TIME));
+                await new Promise((resolve) => setTimeout(resolve, _.random(this.MAX_WAIT_TIME, true)));
                 // Store the values in our array that is templated in HTML
                 this.methodsOfCalling[key] = retVal;
                 // Don't forget to return the Promise so the top-level await works

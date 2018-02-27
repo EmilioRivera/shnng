@@ -33,3 +33,24 @@ mat-card{
     border: 2px dashed blue;
     box-sizing: content-box;
 }
+
+.fileUpload {
+    display: inline-block;
+    border: 2px solid blueviolet;
+}
+
+.fileUpload span {
+    line-height: 32px;
+    height: 32px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.fileUpload matIcon {
+    margin-top: 0.125em;
+}
+
+.fileUpload:hover span,
+.fileUpload:hover matIcon {
+    color: red;
+}

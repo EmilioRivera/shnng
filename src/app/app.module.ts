@@ -15,7 +15,7 @@ import { HService } from './services/h.service';
 import { HttpClientModule } from '@angular/common/http';
 import { SimpleHttpService } from './services/simple-http.service';
 import { PositionExtractorDirective } from './position-extractor.directive';
-
+import { FileUploaderService } from './services/file-uploader.service';
 @NgModule({
   declarations: [
     AppComponent, MaterialComponent, DashboardComponent, IssueComponent, FormStatusPipe, PositionExtractorDirective
@@ -29,7 +29,7 @@ import { PositionExtractorDirective } from './position-extractor.directive';
     BrowserAnimationsModule,
     AppRoutingModule
   ],
-  providers: [HService, SimpleHttpService],
+  providers: [HService, SimpleHttpService, FileUploaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
