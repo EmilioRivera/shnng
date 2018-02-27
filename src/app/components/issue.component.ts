@@ -2,10 +2,11 @@ import { animate, group, style, transition, trigger, query } from '@angular/anim
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HService, ipMethods, ipDescriptors } from '../services/h.service';
-import { MatIconRegistry } from '@angular/material';
+import { MatIconRegistry, MatTableDataSource } from '@angular/material';
 import * as _ from 'lodash';
 import { FileUploaderService } from '../services/file-uploader.service';
 import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
     selector: 'app-issue',
@@ -49,6 +50,7 @@ import { Observable } from 'rxjs/Observable';
     // providers: [HService]
 })
 export class IssueComponent implements OnInit {
+
     @HostBinding('@routeAnimation') public routeAnimation: Boolean = true;
     public id: string;
     private readonly MAX_WAIT_TIME: number = 3000; // ms
@@ -65,7 +67,9 @@ export class IssueComponent implements OnInit {
     // Copy of imported that get our ip
     public readonly ipMethods: (string|symbol)[] = ipMethods;
     public filesToUpload: File[] = [];
-    public fileProgress: Observable<number[]>;
+    public fileProgress: BehaviorSubject<IFileUpload[]>;
+    public displayedColumns: string[] = ['name', 'size', 'progress'];
+
     public constructor(
         // tslint:disable-next-line:no-unused-variable
         private route: ActivatedRoute,
@@ -80,6 +84,7 @@ export class IssueComponent implements OnInit {
         this.id = this.hService.instanceNumber.toString();
         void this.startVariousCalls();
         void this.getValueViaDescriptor();
+        this.fileProgress = new BehaviorSubject<IFileUpload[]>([]);
     }
 
     public fileSelection(e: Event): void {
@@ -104,10 +109,24 @@ export class IssueComponent implements OnInit {
       // For the moment this is as simple as adding eveything
       // we get, but we have to check for duplicates and/or
       // supported files with constraints.
+      const filesToUp: IFileUpload[] = [];
+      const currentSel: IFileUpload[] = this.fileProgress.getValue();
       // tslint:disable-next-line:prefer-for-of
       for (let i: number = 0; i < files.length; i++) {
-        this.filesToUpload.push(files[i]);
+        filesToUp.push({
+          'file': files[i],
+          'progress': 0
+        });
       }
+      const finalSelection: IFileUpload[] = this.removeDuplicates(currentSel, filesToUp);
+      this.filesToUpload = finalSelection.map((v) => v.file);
+      this.fileProgress.next(finalSelection);
+    }
+
+    private removeDuplicates(currentSel: IFileUpload[], toAdd: IFileUpload[]): IFileUpload[] {
+      // Note that the order is important in the _.concat
+      // (We get the newest by the same name)
+      return _.uniqBy(_.concat(toAdd, currentSel), 'file.name');
     }
 
     private async startVariousCalls(): Promise<void> {
@@ -136,4 +155,9 @@ export class IssueComponent implements OnInit {
 
         return valueViaDescriptor;
     }
+}
+
+interface IFileUpload {
+  file: File;
+  progress: number;
 }
