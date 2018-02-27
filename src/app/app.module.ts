@@ -16,9 +16,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { SimpleHttpService } from './services/simple-http.service';
 import { PositionExtractorDirective } from './position-extractor.directive';
 import { FileUploaderService } from './services/file-uploader.service';
+import { FileSizePipe } from './pipes/file-size.pipe';
+
 @NgModule({
   declarations: [
-    AppComponent, MaterialComponent, DashboardComponent, IssueComponent, FormStatusPipe, PositionExtractorDirective
+    AppComponent, MaterialComponent, DashboardComponent, IssueComponent, FormStatusPipe, PositionExtractorDirective, FileSizePipe
   ],
   imports: [
     HttpClientModule,
