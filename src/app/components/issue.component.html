@@ -41,7 +41,9 @@
         </ng-container>
         <ng-container matColumnDef="progress">
             <mat-header-cell *matHeaderCellDef>Progress</mat-header-cell>
-            <mat-cell *matCellDef="let element">{{element.progress}}</mat-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-progress-bar color="accent" mode="determinate" [value]="element.progress * 100"></mat-progress-bar>
+            </mat-cell>
         </ng-container>
     </mat-table>
     <table>
@@ -82,6 +84,7 @@
     <button mat-button color="accent"
             mat-tooltip="Cancel all items"
             [disabled]="anyActive()"
+            (click)="cancelActive()"
             >
             Cancel All
     </button>
