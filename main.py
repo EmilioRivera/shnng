@@ -1,9 +1,9 @@
 import os, fcntl
 import abc
-import cv2
 import numpy as np
 
-from v4l2 import *
+import cv2
+import v4l2
 
 
 class ImageFilter(object):
@@ -72,24 +72,24 @@ class VirtualWebcamWriter(object):
         self.device = open(device_name, 'wb', 0)
 
         print(self.device)
-        capability = v4l2_capability()
-        print("get capabilities result", (fcntl.ioctl(self.device, VIDIOC_QUERYCAP, capability)))
+        capability = v4l2.v4l2_capability()
+        print("get capabilities result", (fcntl.ioctl(self.device, v4l2.VIDIOC_QUERYCAP, capability)))
         print("capabilities", hex(capability.capabilities))
 
-        fmt = V4L2_PIX_FMT_UYVY
+        fmt = v4l2.V4L2_PIX_FMT_UYVY
 
         print("v4l2 driver: ", capability.driver)
-        format = v4l2_format()
-        format.type = V4L2_BUF_TYPE_VIDEO_OUTPUT
+        format = v4l2.v4l2_format()
+        format.type = v4l2.V4L2_BUF_TYPE_VIDEO_OUTPUT
         format.fmt.pix.pixelformat = fmt
         format.fmt.pix.width = self.width
         format.fmt.pix.height = self.height
-        format.fmt.pix.field = V4L2_FIELD_NONE
+        format.fmt.pix.field = v4l2.V4L2_FIELD_NONE
         format.fmt.pix.bytesperline = self.width * 2
         format.fmt.pix.sizeimage = self.width * self.height * 2
-        format.fmt.pix.colorspace = V4L2_COLORSPACE_SRGB
+        format.fmt.pix.colorspace = v4l2.V4L2_COLORSPACE_SRGB
 
-        print("set format result", (fcntl.ioctl(self.device, VIDIOC_S_FMT, format)))
+        print("set format result", (fcntl.ioctl(self.device, v4l2.VIDIOC_S_FMT, format)))
 
     def write(self, array: np.array):
         self.device.write(self._convert_array_to_buffer(array))
