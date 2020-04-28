@@ -17,6 +17,11 @@ cnn_style_ix = 0
 CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
 _current_key = None
 
+WIDTH = 1920
+HEIGHT = 1080
+
+DIMENSIONS = (WIDTH, HEIGHT)
+
 def handle_key(key):
     if key == -1:
         return
@@ -34,7 +39,7 @@ def handle_key(key):
     if key == 48:  # 0
         current_filter = None
     elif key == 49:  # 1
-        current_filter = canny_filter.CannyFilter() if not isinstance(current_filter, canny_filter.CannyFilter) else current_filter
+        current_filter = canny_filter.CannyFilter(dimensions=DIMENSIONS) if not isinstance(current_filter, canny_filter.CannyFilter) else current_filter
     elif key == 50:  # 2
         if isinstance(current_filter, cartoon_filter.CartoonGan):
             cnn_style_ix += 1
@@ -42,7 +47,7 @@ def handle_key(key):
             print('Switching style to', new_style)
             current_filter.change_style(new_style)
         else:
-            current_filter = cartoon_filter.CartoonGan(gpu=True)
+            current_filter = cartoon_filter.CartoonGan(dimensions=DIMENSIONS, gpu=True)
     else:
         # Revert back _current_key
         _current_key = old_key
@@ -60,8 +65,6 @@ def configure_video_options(capture_device, width, height):
     if not success:
         raise Exception('Failed to set correct width and height')
 
-WIDTH = 1920
-HEIGHT = 1080
 
 # Input device
 cv2.namedWindow("Input image")

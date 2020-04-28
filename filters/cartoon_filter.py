@@ -9,7 +9,8 @@ from . import image_filter
 WIDTH, HEIGHT = 1920, 1080
 
 class CartoonGan(image_filter.ImageFilter):
-    def __init__(self, gpu=False, style='Hayao', model_path='./pretrained_model'):
+    def __init__(self, gpu=False, style='Hayao', model_path='./pretrained_model', *args, **kwargs):
+        image_filter.ImageFilter.__init__(self, *args, **kwargs)
         import torch
         import os
         import numpy as np
@@ -26,7 +27,7 @@ class CartoonGan(image_filter.ImageFilter):
         if gpu:
             self.model.cuda()
         # TODO: Check what the load_size is
-        self.load_size = 400  # Default value as taken from the repo
+        self.load_size = 300  # Default value as taken from the repodesired_dimensions
 
         # TODO: Check for optimizations
         # self.image_tensor = Variable()
@@ -79,4 +80,4 @@ class CartoonGan(image_filter.ImageFilter):
         # print(type(output), output.shape)
         arr = np.moveaxis(output.numpy().squeeze(), 0, -1)
         # print(arr.shape, arr.dtype, arr.min(), arr.max())
-        return cv2.resize(arr[:,:,::-1], (WIDTH, HEIGHT))
+        return cv2.resize(arr[:,:,::-1], self.dimensions)
