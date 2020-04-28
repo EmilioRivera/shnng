@@ -9,10 +9,6 @@ import cv2
 import v4l2
 
 
-class StyleTransferFilter(image_filter.ImageFilter):
-    def process_frame(self, frame):
-        pass
-
 current_filter = canny_filter.CannyFilter()
 cnn_style_ix = 0
 CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
