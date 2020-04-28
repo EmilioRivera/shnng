@@ -16,8 +16,15 @@ _current_key = None
 
 WIDTH = 1920
 HEIGHT = 1080
-
 DIMENSIONS = (WIDTH, HEIGHT)
+
+# Virtual webcam
+virtual_loopback_write_device_name = '/dev/video4'
+virtual_loopback_read_device_name = '/dev/video5'
+ENABLE_VIRTUAL_WRITER = True
+ENABLE_VIRTUAL_READER = False
+CAM_DEVICE = '/dev/video0'
+
 
 def handle_key(key):
     if key == -1:
@@ -63,20 +70,10 @@ def configure_video_options(capture_device, width, height):
         raise Exception('Failed to set correct width and height')
 
 
-
-
-# Virtual webcam
-virtual_loopback_write_device_name = '/dev/video4'
-virtual_loopback_read_device_name = '/dev/video5'
-ENABLE_VIRTUAL_WRITER = True
-ENABLE_VIRTUAL_READER = False
-
-
 def start_virtual_webcam_loop():
     # Input device
     cv2.namedWindow("Input image")
-    cam_device = '/dev/video0'
-    vc = cv2.VideoCapture(cam_device)
+    vc = cv2.VideoCapture(CAM_DEVICE)
     configure_video_options(vc, WIDTH, HEIGHT)
 
     # Filter output
