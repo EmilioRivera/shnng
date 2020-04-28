@@ -63,71 +63,77 @@ def configure_video_options(capture_device, width, height):
         raise Exception('Failed to set correct width and height')
 
 
-# Input device
-cv2.namedWindow("Input image")
-cam_device = '/dev/video0'
-vc = cv2.VideoCapture(cam_device)
-configure_video_options(vc, WIDTH, HEIGHT)
 
-# Filter output
-cv2.namedWindow("Filter result")
 
 # Virtual webcam
 virtual_loopback_write_device_name = '/dev/video4'
 virtual_loopback_read_device_name = '/dev/video5'
-
-
 ENABLE_VIRTUAL_WRITER = True
 ENABLE_VIRTUAL_READER = False
 
-# Writer
-virtual_writer = None
-if ENABLE_VIRTUAL_WRITER:
-    virtual_writer = VirtualWebcamWriter(virtual_loopback_write_device_name, WIDTH, HEIGHT)
 
+def start_virtual_webcam_loop():
+    # Input device
+    cv2.namedWindow("Input image")
+    cam_device = '/dev/video0'
+    vc = cv2.VideoCapture(cam_device)
+    configure_video_options(vc, WIDTH, HEIGHT)
 
-# Virtual webcam reader
-if ENABLE_VIRTUAL_READER:
-    virtual_reader = cv2.VideoCapture(virtual_loopback_read_device_name)
-    virtual_window_output = 'Virtual device output'
-    cv2.namedWindow(virtual_window_output)
-
-
-if vc.isOpened(): # try to get the first frame
-    rval, frame = vc.read()
-else:
-    rval = False
-
-while rval:
-    rval, frame = vc.read()
-
-    if ENABLE_VIRTUAL_READER:
-        vwebam_rval, vwebcam_frame = virtual_reader.read()
-        if vwebam_rval == -1:
-            print('Could not read from virtualwebcam')
-
-    new_frame = transform_frame(frame)
-
-    cv2.imshow("Input image", frame)
-    cv2.imshow("Filter result", new_frame)
+    # Filter output
+    cv2.namedWindow("Filter result")
     
-    if ENABLE_VIRTUAL_READER:
-        cv2.imshow(virtual_window_output, vwebcam_frame)
-    
+    # Writer
+    virtual_writer = None
     if ENABLE_VIRTUAL_WRITER:
-        virtual_writer.write(new_frame)
+        virtual_writer = VirtualWebcamWriter(virtual_loopback_write_device_name, WIDTH, HEIGHT)
 
 
-    key = cv2.waitKey(20)
-    if key == 27:  # ESC key
-        break
-    handle_key(key)
+    # Virtual webcam reader
+    if ENABLE_VIRTUAL_READER:
+        virtual_reader = cv2.VideoCapture(virtual_loopback_read_device_name)
+        virtual_window_output = 'Virtual device output'
+        cv2.namedWindow(virtual_window_output)
 
-cv2.destroyWindow("Filter result")
-cv2.destroyWindow("Input image")
-if ENABLE_VIRTUAL_WRITER:
-    virtual_writer.destroy()
-if ENABLE_VIRTUAL_READER:
-    cv2.destroyWindow(virtual_window_output)
-    virtual_reader.release()
-vc.release()
+
+    if vc.isOpened(): # try to get the first frame
+        rval, frame = vc.read()
+    else:
+        rval = False
+
+    while rval:
+        rval, frame = vc.read()
+
+        if ENABLE_VIRTUAL_READER:
+            vwebam_rval, vwebcam_frame = virtual_reader.read()
+            if vwebam_rval == -1:
+                print('Could not read from virtualwebcam')
+
+        new_frame = transform_frame(frame)
+
+        cv2.imshow("Input image", frame)
+        cv2.imshow("Filter result", new_frame)
+        
+        if ENABLE_VIRTUAL_READER:
+            cv2.imshow(virtual_window_output, vwebcam_frame)
+        
+        if ENABLE_VIRTUAL_WRITER:
+            virtual_writer.write(new_frame)
+
+
+        key = cv2.waitKey(20)
+        if key == 27:  # ESC key
+            break
+        handle_key(key)
+
+    cv2.destroyWindow("Filter result")
+    cv2.destroyWindow("Input image")
+    if ENABLE_VIRTUAL_WRITER:
+        virtual_writer.destroy()
+    if ENABLE_VIRTUAL_READER:
+        cv2.destroyWindow(virtual_window_output)
+        virtual_reader.release()
+    vc.release()
+
+
+if __name__ == "__main__":
+    start_virtual_webcam_loop()
