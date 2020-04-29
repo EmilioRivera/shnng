@@ -5,9 +5,6 @@ import cv2
 from . import image_filter
 
 
-# TODO: Remove this
-WIDTH, HEIGHT = 1920, 1080
-
 CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
 
 
