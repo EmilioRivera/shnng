@@ -1,26 +1,24 @@
 import numpy as np
+from argparse import ArgumentParser
 from filters import image_filter
 from filters import canny_filter
 from filters import cartoon_filter
 from virtual_webcam_writer import VirtualWebcamWriter
 import cv2
 
+PARSER = ArgumentParser()
+PARSER.add_argument('--input-device', type=str, default='/dev/video0')
+PARSER.add_argument('--output-device', type=str, default='/dev/video4')
+PARSER.add_argument('--output-read-device', type=str, required=False)
+PARSER.add_argument('--disable-output-write', action='store_true')
+PARSER.add_argument('--disable-output-read', action='store_true', default=True)
+PARSER.add_argument('--width', type=int, default=640)
+PARSER.add_argument('--height', type=int, default=480)
 
 current_filter = None
 cnn_style_ix = 0
 CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
 _current_key = None
-
-WIDTH = 1920
-HEIGHT = 1080
-DIMENSIONS = (WIDTH, HEIGHT)
-
-# Virtual webcam
-virtual_loopback_write_device_name = '/dev/video4'
-virtual_loopback_read_device_name = '/dev/video5'
-ENABLE_VIRTUAL_WRITER = True
-ENABLE_VIRTUAL_READER = False
-CAM_DEVICE = '/dev/video0'
 
 
 def handle_key(key):
@@ -67,10 +65,17 @@ def configure_video_options(capture_device, width, height):
         raise Exception('Failed to set correct width and height')
 
 
-def start_virtual_webcam_loop():
+def start_virtual_webcam_loop(ARGS):
     # Input device
     cv2.namedWindow("Input image")
-    vc = cv2.VideoCapture(CAM_DEVICE)
+    vc = cv2.VideoCapture(ARGS['input_device'])
+
+    ENABLE_VIRTUAL_WRITER = not ARGS['disable_output_write']
+    ENABLE_VIRTUAL_READER = not ARGS['disable_output_read']
+
+    virtual_loopback_write_device_name = ARGS['output_device']
+    virtual_loopback_read_device_name = ARGS['output_read_device']
+
     configure_video_options(vc, WIDTH, HEIGHT)
 
     # Filter output
@@ -130,4 +135,8 @@ def start_virtual_webcam_loop():
 
 
 if __name__ == "__main__":
-    start_virtual_webcam_loop()
+    ARGS = PARSER.parse_args()
+    print(ARGS, vars(ARGS))
+    WIDTH, HEIGHT = ARGS.width, ARGS.height
+    DIMENSIONS = (WIDTH, HEIGHT)
+    start_virtual_webcam_loop(vars(ARGS))
