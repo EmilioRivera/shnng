@@ -17,7 +17,6 @@ PARSER.add_argument('--height', type=int, default=480)
 
 current_filter = None
 cnn_style_ix = 0
-CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
 _current_key = None
 
 
@@ -25,7 +24,7 @@ def handle_key(key):
     if key == -1:
         return
 
-    global current_filter, cnn_style_ix, _current_key, CNN_STYLES
+    global current_filter, cnn_style_ix, _current_key
     if _current_key is not None and _current_key != key:
         print('Unregistering because current key is {} and key is {}'.format(_current_key, key))
         if current_filter is not None:
@@ -42,7 +41,7 @@ def handle_key(key):
     elif key == 50:  # 2
         if isinstance(current_filter, cartoon_filter.CartoonGan):
             cnn_style_ix += 1
-            new_style = CNN_STYLES[cnn_style_ix % len(CNN_STYLES)]
+            new_style = cartoon_filter.CNN_STYLES[cnn_style_ix % len(cartoon_filter.CNN_STYLES)]
             print('Switching style to', new_style)
             current_filter.change_style(new_style)
         else:

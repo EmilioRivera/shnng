@@ -8,6 +8,9 @@ from . import image_filter
 # TODO: Remove this
 WIDTH, HEIGHT = 1920, 1080
 
+CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
+
+
 class CartoonGan(image_filter.ImageFilter):
     def __init__(self, gpu=False, style='Hayao', model_path='./pretrained_model', *args, **kwargs):
         image_filter.ImageFilter.__init__(self, *args, **kwargs)
@@ -19,7 +22,6 @@ class CartoonGan(image_filter.ImageFilter):
         from network.Transformer import Transformer
         self.gpu = gpu
         self.model = Transformer()
-        print(self.model)
         self.model_path = model_path
         self.model.load_state_dict(torch.load(os.path.join(self.model_path, style + '_net_G_float.pth')))
         self.current_style = style
