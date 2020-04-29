@@ -1,12 +1,9 @@
-import os, fcntl
-import abc
 import numpy as np
 from filters import image_filter
 from filters import canny_filter
 from filters import cartoon_filter
 from virtual_webcam_writer import VirtualWebcamWriter
 import cv2
-import v4l2
 
 
 current_filter = canny_filter.CannyFilter()
