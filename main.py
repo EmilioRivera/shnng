@@ -6,7 +6,7 @@ from virtual_webcam_writer import VirtualWebcamWriter
 import cv2
 
 
-current_filter = canny_filter.CannyFilter()
+current_filter = None
 cnn_style_ix = 0
 CNN_STYLES = ['Hayao', 'Hosoda', 'Paprika', 'Shinkai']
 _current_key = None
