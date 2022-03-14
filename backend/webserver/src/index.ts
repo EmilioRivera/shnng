@@ -8,6 +8,7 @@ dotenv.config()
 const APPLICATION_SETTINGS: ApplicationSettings = {
     environment: process.env.NODE_ENV === 'development' ? 'development' : 'production',
     serverPort:  parseInt(process.env.SERVER_PORT || '3000'),
+    emotionDetectionUrl: 'http://localhost:3000/unmapped',
     defaultServicesTimeout: parseInt(process.env.DEFAULT_SERVICES_TIMEOUT || '5000')
 }
 
