@@ -8,6 +8,7 @@ dotenv.config()
 const APPLICATION_SETTINGS: ApplicationSettings = {
     environment: process.env.NODE_ENV === 'development' ? 'development' : 'production',
     serverPort:  parseInt(process.env.SERVER_PORT || '3000'),
+    defaultServicesTimeout: parseInt(process.env.DEFAULT_SERVICES_TIMEOUT || '5000')
 }
 
 const app = express();
