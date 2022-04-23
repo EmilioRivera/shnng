@@ -10,6 +10,8 @@ DOCKER_IMAGE ?= $(shell $(MAKE) get-package-name)
 DOCKER_TAG ?= $(shell $(MAKE) get-package-version)
 DOCKER_FQIM ?= $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+DOCKER_RUNTIME_PORT ?= 3002
+
 # Commands
 DOCKER ?= docker
 NODE ?= node
@@ -29,6 +31,11 @@ node-dev:
 
 docker-run:
 	@echo $(DOCKER) $(DOCKER_ARGS) run --rm -it $(DOCKER_FQIM) $(DOCKER_ENTRYPOINT)
+
+.PHONY: docker-build
+docker-build:
+	DOCKER_BUILKIT=1 $(DOCKER) build . --build-arg APP_PORT=$(DOCKER_RUNTIME_PORT) -t $(DOCKER_FQIM)
+
 
 # A custom command showing how we can use jq to get information
 .PHONY: list-deps
