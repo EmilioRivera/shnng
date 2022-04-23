@@ -8,7 +8,8 @@ include ../Makefiles/npm.utils.Makefile
 # Definitions
 DOCKER_IMAGE ?= $(shell $(MAKE) get-package-name)
 DOCKER_TAG ?= $(shell $(MAKE) get-package-version)
-DOCKER_FQIM ?= $(DOCKER_IMAGE):$(DOCKER_TAG)
+DOCKER_REPOSITORY ?= local
+DOCKER_FQIM ?= $(DOCKER_REPOSITORY)/$(DOCKER_IMAGE):$(DOCKER_TAG)
 
 DOCKER_RUNTIME_PORT ?= 3002
 
