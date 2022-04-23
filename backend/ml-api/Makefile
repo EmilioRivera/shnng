@@ -11,6 +11,8 @@ DOCKER_IMAGE ?= $(PYTHON_APP)
 DOCKER_TAG ?= latest
 DOCKER_FQIM ?= $(DOCKER_IMAGE):$(DOCKER_TAG)
 
+DOCKER_RUNTIME_PORT=8001
+
 # Commands
 UVICORN ?= uvicorn
 DOCKER ?= docker
@@ -29,4 +31,7 @@ docker-run:
 python-dev:
 	$(UVICORN) --reload $(FASTAPI_APP)
 
+.PHONY: docker-build
+docker-build:
+	DOCKER_BUILKIT=1 $(DOCKER) build . --build-arg APP_PORT=$(DOCKER_RUNTIME_PORT) -t $(DOCKER_FQIM)
 
