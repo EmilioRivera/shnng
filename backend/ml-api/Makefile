@@ -25,7 +25,7 @@ python-run:
 	$(UVICORN) $(FASTAPI_APP)
 
 docker-run:
-	@echo $(DOCKER) $(DOCKER_ARGS) run --rm -it $(DOCKER_FQIM) $(DOCKER_ENTRYPOINT-)
+	$(DOCKER) $(DOCKER_ARGS) run --rm -it -p $(DOCKER_RUNTIME_PORT):$(DOCKER_RUNTIME_PORT) $(DOCKER_FQIM) $(DOCKER_ENTRYPOINT-)
 
 .PHONY: python-dev
 python-dev:
