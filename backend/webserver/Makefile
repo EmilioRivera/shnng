@@ -30,7 +30,7 @@ node-dev:
 	@echo "TODO"
 
 docker-run:
-	@echo $(DOCKER) $(DOCKER_ARGS) run --rm -it $(DOCKER_FQIM) $(DOCKER_ENTRYPOINT)
+	$(DOCKER) $(DOCKER_ARGS) run --init --rm -it --env-file=.env -e SERVER_PORT=$(DOCKER_RUNTIME_PORT) -e NODE_ENV="production" -p $(DOCKER_RUNTIME_PORT):$(DOCKER_RUNTIME_PORT) $(DOCKER_FQIM) $(DOCKER_ENTRYPOINT)
 
 .PHONY: docker-build
 docker-build:
