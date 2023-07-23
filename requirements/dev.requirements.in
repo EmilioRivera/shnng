@@ -1,0 +1,5 @@
+# N.B.: It seems that without the `file:` prefix, the absolute path to this repo would be used
+#       With it, the requirements.txt is clean and can be commited to VCS
+-e file:.
+tox
+pip-compile-multi
