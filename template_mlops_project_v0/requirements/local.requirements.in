@@ -1,0 +1,5 @@
+-r dev.requirements.in
+-r data-science.requirements.in
+-r testing.requirements.in
+-r beauty.requirements.in
+-r docs.requirements.in

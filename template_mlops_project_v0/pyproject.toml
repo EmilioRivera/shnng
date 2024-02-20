@@ -1,0 +1,79 @@
+# TODO: Set minimal setuptools version
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name =  "template-mlops-project"
+description = "A starting point for your MLOps endeavors"
+# TODO: Dynamic version based on git commit
+version = "0.1.0"
+
+authors = [
+    { name = "Emilio Rivera-Landos", email="emilio.rivera.landos@gmail.com" },
+]
+
+# We will try using only the dependencies necessary to run the project
+dependencies = [
+    "pandas",
+    "numpy",
+    "scikit-learn",
+    "pydantic-settings",
+]
+
+
+[tool.black]
+profile = "google"
+# TODO: Consider changing this, I like 120
+line-length = 120
+
+[tool.ruff]
+# We select almost everything by default.
+# You are expected to add/remove what you find relevant
+select = [
+    "E",
+    "F",
+    "W",
+    "I",
+    "N",
+    "D",
+    "UP",
+    "S",
+    "B",
+    "A",
+    "C4",
+    "DTZ",
+    "EM",
+    "EXE",
+    "FA",
+    "ISC",
+    "G",
+    "PIE",
+    "T20",
+    "PYI",
+    "PT",
+    "Q",
+    "RET",
+    "SIM",
+    "PTH",
+    "PD",
+    "NPY",
+    "TRY",
+    "PERF",
+    "RUF",
+]
+# TODO: Consider changing this, I like 120
+line-length = 120
+ignore = [
+    "E501", # line-length
+    # TODO: You should consider turning them on
+    "D100",
+    "D101",
+    "D103",
+    "S101", # For tests, there are other options to achieve the same result, but wtv
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests/unit/",
+]
