@@ -1,0 +1,30 @@
+mat-sidenav-container{
+    /* Force an all page render */
+    height: 100vh;
+}
+
+main{
+    margin: 72px 8px 8px 8px;
+    display: block;
+}
+
+#maintoolbar{
+    top: 0px;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    display: block;   
+    height: 64px; 
+}
+
+#maintoolbar span{
+    display: inline-block;
+    line-height: 64px;
+}
+
+#maintoolbar i{
+    cursor: pointer;
+    padding: 0px 8px;
+    display: inline-block;
+    vertical-align: middle;
+}

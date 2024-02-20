@@ -1,0 +1,107 @@
+<mat-card>
+    <mat-card-title>
+        Ways to get values from services (instance <span *ngIf="hService.instanceNumber">{{hService.instanceNumber}}</span>)
+    </mat-card-title>
+    <mat-card-content>
+        <span mat-subheader>Ways of using http calls</span>
+        <mat-list id="httplist">
+            <mat-list-item *ngFor="let v of ipMethods; last as last">
+                <span class="name">{{v}}:</span>
+                <span class="value" *ngIf="methodsOfCalling[v]">{{methodsOfCalling[v]}}</span>
+                <mat-divider [inset]="false" *ngIf="!last"></mat-divider>
+            </mat-list-item>
+        </mat-list>
+        <label for="file" class="fileUpload">
+            <mat-icon>file_upload</mat-icon>
+            <span>Chooze deh file</span>
+        </label>
+        <input type="file" name="file" id="file" class="inputfile" (change)="fileSelection($event)" multiple/>
+    </mat-card-content>
+</mat-card>
+<mat-card >
+    <h3>Upload Queue</h3>
+    <mat-list>
+        <mat-list-item *ngFor="let file of (fileProgress | async); last as last ">
+            <mat-icon matListIcon aria.hidden="true">file_upload</mat-icon>
+            <span>{{file.file.name}}</span>
+            <mat-divider *ngIf="!last"></mat-divider>
+        </mat-list-item>
+    </mat-list>
+    <mat-table [dataSource]="fileProgress">
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            
+        <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef>Name</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.file.name}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="size">
+            <mat-header-cell *matHeaderCellDef>Size</mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.file.size | fileSize}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="progress">
+            <mat-header-cell *matHeaderCellDef>Progress</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <mat-progress-bar color="accent" mode="determinate" [value]="element.progress * 100"></mat-progress-bar>
+            </mat-cell>
+        </ng-container>
+    </mat-table>
+    <table>
+        <thead>
+            <th>Name</th>
+            <th>Size</th>
+            <th>Progress</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let f of fileProgress | async">
+                <td>{{f.file.name}}</td>
+                <td>{{f.file.size | fileSize}}</td>
+                <td>{{f.progress}}</td>
+                <td>Empty</td>
+                <td>Empty</td>                
+            </tr>
+        </tbody>
+    </table>
+</mat-card>
+
+<mat-card>
+    <mat-card-subtitle>Queue progress</mat-card-subtitle>
+    <mat-progress-bar
+        color="accent"
+        mode="determinate"
+    ></mat-progress-bar>
+
+    <button mat-button color="primary"
+            mat-tooltip="Upload all items"
+            (click)="uploadAllFiles()"
+            [disabled]="this.fileProgress.getValue().length == 0"
+            >
+            Upload All
+    </button>
+
+    <button mat-button color="accent"
+            mat-tooltip="Cancel all items"
+            [disabled]="anyActive()"
+            (click)="cancelActive()"
+            >
+            Cancel All
+    </button>
+
+    <button mat-button color="warn"
+            mat-tooltip="Remove All items"
+            (click)="removeAllFiles()"
+            [disabled]="this.fileProgress.getValue().length == 0"
+            >
+            Remove all
+    </button>
+</mat-card>
+<mat-card>
+    <mat-card-title>Mouse events help</mat-card-title>
+    <mat-card-content>
+        <div class="rendercanvas" appPositionExtractor (appPosition)="obtainValues($event)">
+            Here should be the canvas...
+        </div>
+    </mat-card-content>
+</mat-card>

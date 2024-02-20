@@ -1,0 +1,20 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<mat-sidenav-container>
+  <mat-sidenav #sidenav>
+    <mat-list>
+      <a mat-list-item routerLink="{{link.target}}" *ngFor="let link of appLinks" routerLinkActive="active"> {{ link.name }} </a>
+      <!--<a routerLink="/material" routerLinkActive="active">Material</a>
+          <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>-->
+      <!-- <a mat-list-item [routerLink]="['/issue/tessst']" routerLinkActive="active">Issue with Param</a> -->
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary" id="maintoolbar">
+      <i class="material-icons" (click)="sidenav.toggle()">menu</i>
+      <span>{{title}}</span>
+    </mat-toolbar>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>
