@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  backend-ml-api:
+    image: local/app:latest
+    container_name: svc-ml-api
+    ports:
+      - "8000:8001"
+    networks:
+      - frontend-network
+      - backend-network
+  backend-webserver:
+    image: local/webserver:1.0.0
+    container_name: svc-webserver
+    ports:
+      - "3000:3002"
+    environment:
+      - SERVER_PORT=3002
+      - DEFAULT_SERVICES_TIMEOUT=10000
+      - NODE_ENV=production
+      - EMOTION_DETECTION_URL=http://backend-ml-api:8001/emotion/overall
+    depends_on:
+      - backend-ml-api
+    networks:
+      - backend-network
+
+networks:
+  frontend-network:
+  backend-network:
